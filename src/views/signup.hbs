@@ -1,0 +1,132 @@
+<div class="container p-5">
+  <form id="signup-form" method="{{method}}" action="{{action}}" autocomplete="off" <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="f_name">First Name:</label>
+        <input type="text" class="form-control" name="firstName" id="f_name" onkeyup="check(this)"
+          placeholder="First Name" required>
+      </div>
+      <div class="col-lg-6">
+        <label for="l_name">First Name:</label>
+        <input type="text" class="form-control" name="lastName" id="l_name" placeholder="Last Name"
+          onkeyup="check(this)" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="years">Years Of Experience:</label>
+        <input type="text" class="form-control" name="yearsOfExperience" id="years" onkeyup="numCheck(this)"
+          placeholder="Enter your Experience" required>
+      </div>
+      <div class="col-lg-6">
+        <label for="cityName">City:</label>
+        <input type="text" class="form-control" name="city" onkeyup="check(this)" id="cityName"
+          placeholder="Enter your City" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="address">Address:</label>
+        <input type="text" class="form-control" name="address" id="address" onkeyup="check(this)"
+          placeholder="Enter your Address" required>
+      </div>
+      <div class="col-lg-6">
+        <label for="phone">Contact Number:</label>
+        <input type="text" class="form-control" name="contact" id="contact" placeholder="Enter your Phone #"
+          onkeyup="check(this)" required />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <br>
+        <label>Gender</label>
+        <input type="radio" id="gender-male" value="Male" name="gender" required> <label for="gender-male">Male</label>
+        <input type="radio" id="gender-female" value="Female" name="gender" required> <label
+          for="gender-female">Female</label>
+      </div>
+      <div class="col-lg-6">
+        <br>
+        <label for="prof">Choose your Profession:</label>
+        <select name="profession" id="cars">
+          <option value="IT">IT</option>
+          <option value="Management">Management</option>
+          <option value="Student">Student</option>
+        </select>
+        <br><br>
+      </div>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Sign Up" />
+  </form>
+</div>
+<script>
+
+  const validPhoneNumber = /^[789]\d{9}$/
+  const validString = /^[A-Za-z]*$/
+
+  const check = (element) => {
+    const item = element.value;
+    const checker = (element.id === 'contact') ? validPhoneNumber : validString
+    if (!item.match(checker)) {
+      element.setAttribute('class', 'form-control is-invalid')
+    } else {
+      element.setAttribute('class', 'form-control')
+    }
+  }
+
+  const numCheck = (element) => {
+    const item = element.value;
+    if (item <= 0 || item > 40) {
+      element.setAttribute('class', 'form-control is-invalid')
+    }
+    else {
+      element.setAttribute('class', 'form-control')
+    }
+  }
+
+  const $signForm = document.querySelector("#signup-form")
+  $signForm.addEventListener('submit', (event) => {
+    const submitMethod = $signForm.method;
+    const submitURL = $signForm.action;
+    let signUpDetail = {};
+    const formData = new FormData($signForm);
+
+    for (const fields of formData) {
+      const [key, value] = fields;
+      signUpDetail[key] = value;
+    }
+
+    const config = {
+      method: submitMethod.toUpperCase(),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(signUpDetail)
+    }
+
+    fetch(submitURL, config)
+      .then(response => {
+        if (response.status === 200) {
+          return response.json()
+        } else {
+          throw (new Error(response.status))
+        }
+      })
+      .then((data) => {
+        alert(data.message);
+        window.location.href = "/charts"
+      })
+      .catch(error => {
+        switch (error.message) {
+          case "400":
+            alert("Please check form values...");
+            break;
+          case "500":
+            alert("Please Try after some time...");
+            break;
+          default:
+            console.error(error);
+        }
+      })
+  })
+</script>

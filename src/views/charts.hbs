@@ -1,0 +1,111 @@
+<div class="container my-5">
+  <div class="row one p-2 d-flex">
+    <div class="col-lg-6 col-md-6 text-center">
+      <h4>Gender Count represented in a Graph</h4>
+      <p class="p-3">{{gender}}</p>
+      <p>Desc WIP</p>
+    </div>
+    <div class="col-lg-6 col-md-6">
+      <input type="hidden" id="genderLabel" value="{{genderlabel}}">
+      <input type="hidden" id="genderCount" value="{{genderCount}}">
+      <canvas id="myChart" width="400" height="400"></canvas>
+    </div>
+  </div>
+  <div class="row one d-flex p-2">
+    <div class="col-lg-6 col-md-6 text-center">
+      <h4>Attendees by Profession in a Graph</h4>
+      <p class="p-3">{{profession}}</p>
+    </div>
+    <div class="col-lg-6 col-md-6">
+      <input type="hidden" id="professionLabel" value="{{professionLabel}}">
+      <input type="hidden" id="professionCount" value="{{professionCount}}">
+      <canvas id="profession"></canvas>
+
+    </div>
+  </div>
+  <div class="row one d-flex p-2">
+    <div class="col-lg-6 col-md-6 text-center">
+      <h4>Chart based on years of experience</h4>
+      <p class="p-3">{{profession}}</p>
+    </div>
+    <div class="col-lg-6 col-md-6 text-center">
+      <input type="hidden" id="experience" value="{{experience}}">
+      <canvas id="years"></canvas>
+    </div>
+  </div>
+</div>
+<script>
+
+  //getting the gender labels
+  const genderLabel = document.getElementById('genderLabel').value.split(",")
+  //getting the gender count
+  const genderCount = document.getElementById('genderCount').value.split(",")
+  //displays the Gender Chart
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: genderLabel,
+      datasets: [{
+        label: 'Gender Count',
+        data: genderCount,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+  //displays the Profession Chart
+  const professionLabels = document.getElementById("professionLabel").value.split(",");
+  const professionCount = document.getElementById("professionCount").value.split(",");
+  const professionChart = document.getElementById("profession")
+  var myLineChart = new Chart(professionChart, {
+    type: 'line',
+    data: {
+      labels: professionLabels,
+      datasets: [{
+        label: "Profession Count",
+        data: professionCount,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)'
+        ]
+      }]
+    }
+  });
+
+  //displays chart by data
+  const expCount = document.getElementById("experience").value.split(",")
+  const experienceChart = document.getElementById("years")
+
+  var myPieChart = new Chart(experienceChart, {
+    type: 'doughnut',
+    data: {
+      labels: ["0-2 exp", "2-6 exp", " >6 exp"],
+      datasets: [{
+        backgroundColor: ['#f4c406', '#e67e22', '#16a085'],
+        data: expCount
+      }]
+    }
+  });
+
+
+</script>
